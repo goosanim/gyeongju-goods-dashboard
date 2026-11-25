@@ -115,8 +115,9 @@ main{max-width:var(--max);margin:0 auto;padding:0 32px}
 .judge .ev{border-top:1px solid var(--line);padding-top:14px;font-size:12.5px;color:var(--mu);display:grid;gap:6px}
 .judge .ev span{display:flex;justify-content:space-between;gap:10px}
 .judge .ev b{color:var(--char);font-weight:600}
-.eq{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:8px 0 4px}
-.eq .box{border:1px dashed var(--faint);border-radius:12px;padding:16px 20px;min-width:130px}
+.eq{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:18px;margin:16px auto 6px;max-width:860px}
+.eq .box{min-width:0;border:1px dashed var(--faint);border-radius:12px;padding:18px 16px;text-align:center}
+@media (max-width:720px){.eq{grid-template-columns:1fr;gap:10px}.eq .op{display:none}}
 .eq .box small{display:block;font-size:11px;color:var(--mu);letter-spacing:.04em}
 .eq .box b{font-size:22px;letter-spacing:-.03em}
 .eq .box.miss{border-color:#B08A4F;background:#FBF7EE}
@@ -351,13 +352,13 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
     <div class="grid3">
       <div class="card rv">
         <div class="k">H1 · 검증 대기</div>
-        <h3>매출 변동은 유동보다<br>결제 건수와 더 가깝다</h3>
+        <h3>매출 변동은 유동인구보다<br>결제 건수와 더 가깝다</h3>
         <p>건당 결제액이 거의 일정하다면, 매출이 흔들리는 이유는 사람 수보다 결제 횟수에 있을 거라고 봤습니다.</p>
         <div class="impact" style="margin-top:16px">확인한 자료: 건당 결제액 13개월, 매출·유동 상관 65개 관측</div>
       </div>
       <div class="card rv">
         <div class="k">H2 · 지지</div>
-        <h3>매출은 오후·20~30대·여성에<br>몰리고, 유동 연령과 다르다</h3>
+        <h3>매출은 오후·20~30대·여성에<br>몰리고, 유동인구 연령 구성과 다르다</h3>
         <p>황리단길을 찾은 사람과 실제로 결제하는 사람이 다를 수 있습니다. 상품과 마케팅을 짤 때 먼저 볼 부분입니다.</p>
         <div class="impact" style="margin-top:16px">확인한 자료: 매출 특성 5상권, 요일·시간대, 신규·단골</div>
       </div>
@@ -544,7 +545,7 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
           <div class="brow"><span class="nm">숙박</span><div class="track"><i data-w="20.7" data-tip="숙박 6곳 (8.5%)"></i></div><b>6</b></div>
           <div class="brow"><span class="nm">사진관 등</span><div class="track"><i data-w="10.3" data-tip="사진관 등 3곳 (4.2%)"></i></div><b>3</b></div>
         </div>
-        <p class="impt"><b>황리단길은 먹거리 중심 상권입니다.</b> 굿즈·소품 판매는 체험·공방 21곳과 일부 카페에서 이뤄지며, 전문 매장은 많지 않습니다. 직접적인 경쟁은 적지만, 고객층은 기존 체험·공방 방문객과 겹칩니다.</p>
+        <p class="impt"><b>황리단길은 먹거리 중심 상권입니다.</b> 굿즈·소품은 체험·공방 21곳과 일부 카페가 겸업하고, 전문 매장은 드뭅니다. 경쟁은 적지만 고객층은 기존 체험·공방 방문객과 겹칩니다.</p>
       </div>
       <div class="card rv">
         <div class="k">온라인 채널 보유 (71곳)</div>
@@ -554,7 +555,7 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
           <div class="brow"><span class="nm">블로그</span><div class="track"><i data-w="34.8" data-tip="블로그 16곳 (22.5%)"></i></div><b>16</b></div>
           <div class="brow"><span class="nm">홈페이지</span><div class="track"><i data-w="2.2" data-tip="홈페이지 1곳 (1.4%)"></i></div><b>1</b></div>
         </div>
-        <p class="impt"><b>홍보는 SNS가 중심이며, 실제 판매형 스토어는 10곳 중 3곳입니다.</b> 온라인 판매의 성장 여지가 있는 동시에, 현재는 오프라인 중심 상권일 가능성도 있어 단정하기 어렵습니다.</p>
+        <p class="impt"><b>홍보는 SNS가 중심이며, 실제 판매형 스토어는 10곳 중 3곳입니다.</b> 온라인 성장 여지와 오프라인 중심 상권이라는 두 해석이 모두 가능해, 단정하기 어렵습니다.</p>
       </div>
       <div class="card rv">
         <div class="k">상품 유형 (313건 · 키워드)</div>
@@ -566,10 +567,10 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
           <div class="brow hi"><span class="nm">도자기·그릇</span><div class="track"><i class="hi" data-w="53.8" data-tip="도자기·그릇 28건"></i></div><b>28</b></div>
           <div class="brow hi"><span class="nm">액세서리</span><div class="track"><i class="hi" data-w="44.2" data-tip="액세서리 23건"></i></div><b>23</b></div>
         </div>
-        <p class="impt"><b>등록 상품의 약 3분의 2는 식음·디저트이며, 소품류는 87건(27.8%)입니다.</b> 소품이 주력 상품은 아니지만, 일정 수준의 상품군은 형성되어 있는걸 확인할 수 있습니다.</p>
+        <p class="impt"><b>등록 상품의 약 3분의 2는 식음·디저트이며, 소품류는 87건(27.8%)입니다.</b> 주력은 아니지만 일정 수준의 상품군은 갖춰져 있습니다.</p>
       </div>
     </div>
-    <div class="impact">상점 71곳 중 상품이 등록된 곳은 48곳이고, 좌표가 없는 상점은 공간 분석에서 제외했습니다. 출처 — 소상공인 상권정보·경주시 공공데이터(상상황리단길 상점·상품, 2026-08 수집)<br>· H3(점포가 늘어도 매출 유지)와 함께 보면, 늘어난 점포가 식음·체험 쪽일 가능성을 시사합니다.<br>· 해석 B(기념품점 수요 방향)에 “상품 단위로 무엇이 실제로 등록돼 있는가”라는 근거를 더합니다.<br>· H1이 막힌 이유(굿즈 단독 매출 없음)를 보완하는 유일한 상품 단위 자료입니다.</div></div>
+    <div class="impact">· H3(점포가 늘어도 매출 유지)와 함께 보면, 늘어난 점포가 식음·체험 쪽일 가능성을 시사합니다.<br>· 해석 B(기념품점 수요 방향)에 “상품 단위로 무엇이 실제로 등록돼 있는가”라는 근거를 더합니다.<br>· H1이 막힌 이유(굿즈 단독 매출 없음)를 보완하는 유일한 상품 단위 자료입니다.<br><br>상점 71곳 중 상품이 등록된 곳은 48곳이고, 좌표가 없는 상점은 공간 분석에서 제외했습니다. 출처 — 소상공인 상권정보·경주시 공공데이터(상상황리단길 상점·상품, 2026-08 수집)</div></div>
   </section>
 
   <section class="sec" id="verdict">
@@ -605,17 +606,17 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
       <div class="judge w rv">
         <div class="tag"><i></i>H1 · 검증 대기</div>
         <h3>매출 분해는<br>아직 모른다</h3>
-        <p>건당 결제액이 ±5% 안에서 거의 변하지 않아 결제 건수 쪽일 거라 짐작할 수는 있습니다. 하지만 월별 건수와 유동 원자료가 없어 확인은 못 했습니다.</p>
+        <p>건당 결제액이 ±5% 안에서 거의 변하지 않아 결제 건수 쪽일 거라 짐작할 수는 있습니다. 하지만 월별 건수와 유동인구 원자료가 없어 확인은 못 했습니다.</p>
         <div class="ev">
           <span>건당 결제액 <b>13,857원</b></span>
           <span>범위 <b>12,935~14,606원</b></span>
-          <span>매출~유동 상관 <b>−0.18</b></span>
+          <span>매출~유동인구 상관 <b>−0.18</b></span>
         </div>
       </div>
     </div>
 
     <div class="card rv" style="margin-top:22px">
-      <div class="k">H1이 막힌 이유</div>
+      <div class="k" style="color:#C9A227">H1이 막힌 이유</div>
       <div class="eq">
         <div class="box"><small>매출</small><b>관측됨</b></div>
         <div class="op">=</div>
@@ -623,7 +624,7 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
         <div class="op">×</div>
         <div class="box"><small>건당 결제액</small><b>13,857원</b></div>
       </div>
-      <p style="font-size:13.5px;margin-top:12px">단가가 거의 일정하다는 건 확인했습니다. 매출이 흔들릴 때 같이 움직였을 쪽은 건수라고 보는 게 자연스럽습니다. 다만 월별 건수를 볼 수 없어서 <b>“그럴 수 있다”</b> 이상은 말하지 않습니다.</p>
+      <p style="font-size:13.5px;margin-top:14px">단가는 큰 변동 없이 일정한 수준을 유지하는 것으로 확인됐습니다. 따라서 매출 변동에는 판매 건수가 영향을 미쳤을 가능성이 있습니다. 다만 월별 판매 건수 자료가 없어, 가능성 수준에서만 해석했습니다.</p>
     </div>
   </section>
 
@@ -675,13 +676,13 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
     <div class="grid2" style="margin-top:22px">
       <div class="card beige rv">
         <div class="k">지금 결정할 수 있는 것</div>
-        <h3>타겟과 시간대,<br>들어갈 방향</h3>
-        <p>20~30대 여성, 오후 시간대, 점포가 늘어도 매출이 유지된 흐름, 황남·황오에 모인 점포. 실행 계획을 세울 때 전제로 둘 수 있는 것들입니다.</p>
+        <h3>타겟 고객과<br>운영 방향</h3>
+        <p>20~30대 여성, 오후 시간대, 점포 증가에도 유지된 매출 흐름, 황남·황오에 집중된 점포 분포는 초기 운영 계획을 세우는 데 참고할 수 있는 근거입니다.</p>
       </div>
       <div class="card rv">
-        <div class="k">지금 결정할 수 없는 것</div>
-        <h3>매출 규모와<br>손익분기</h3>
-        <p>굿즈 단독 판매량과 객단가가 없고 매출 분해도 확인되지 않았습니다. 이 자료로는 “얼마 벌까”에 답할 수 없습니다.</p>
+        <div class="k">아직 판단하기 어려운 것</div>
+        <h3>예상 매출과<br>손익분기점</h3>
+        <p>굿즈 단독 판매량과 객단가, 매출 구성에 대한 자료가 부족합니다. 따라서 현재 자료만으로는 예상 매출이나 손익분기점을 산정하기 어렵습니다.</p>
       </div>
     </div>
   </section>
@@ -699,7 +700,7 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
       <div class="inf rv">
         <div class="lvl">해석 A · 확신도 중간 <span class="conf"><i class="on"></i><i class="on"></i><i></i></span></div>
         <h3>타겟은 20~30대 여성,<br>시간은 오후</h3>
-        <p>매출 구성이 유동 구성과 다릅니다. 매출에서 20~30대가 차지하는 비중이 60대보다 훨씬 큽니다.</p>
+        <p>매출 구성이 유동인구 구성과 다릅니다. 매출에서 20~30대가 차지하는 비중이 60대보다 훨씬 큽니다.</p>
         <div class="why">
           <span><b>근거</b> 매출 54.3% vs 유동 24.0% · 여성 62.8% · 14~18시 45.4%</span>
           <span><b>틀리는 조건</b> 굿즈 구매 고객을 조사했을 때 다른 구성이 나오면 틀린 해석입니다.</span>
@@ -726,7 +727,7 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
     </div>
 
     <div class="card rv" style="margin-top:22px">
-      <div class="k">짐작하지 않은 것</div>
+      <div class="k" style="color:#C9A227">짐작하지 않은 것</div>
       <p style="font-size:13.5px">객단가, 전환율, 재방문율, 월 매출 규모는 넣지 않았습니다. <b>굿즈 단독 판매 자료</b> 없이 이 숫자를 만들면 근거가 아니라 추정이 됩니다. 필요한 자료는 다음 장에 적었습니다.</p>
     </div>
   </section>
@@ -735,15 +736,16 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
     <div class="sec-head rv">
       <div class="chap">07</div>
       <div>
-        <h2>결론: 근거는 일부, 조건은 붙습니다</h2>
-        <p class="lead"><b>무엇이 확인됐고, 무엇을 더 봐야 하는지</b>로 정리했습니다.</p>
+        <h2>결론: 가능성은 확인했고, 판단에는 근거가 더 필요합니다</h2>
+        <p class="lead">확인된 가능성과 아직 확인되지 않은 조건을 함께 짚었습니다.</p>
       </div>
     </div>
 
     <div class="concl rv">
       <div class="kick">종합 판단</div>
-      <h2>가능성은 보이지만,<br>확정하려면 <em>자료가 더 필요</em>합니다.</h2>
-      <p>황리단길은 점포가 늘어도 점포당 매출이 유지됐고, 매출은 20~30대 여성과 오후 시간대에 몰렸습니다. 기념품점 44%가 황남·황오에 모여 있어 고를 거리가 있는 상권이기도 합니다. 다만 굿즈 단독 매출과 전환율, 2025년 방문 실측이 없습니다. 사업성 예측이 아니라 <b>탐색적 근거</b>로 읽어야 합니다.</p>
+      <h2>가능성은 보이지만,<br>사업성을 확신하기엔 아직 이릅니다.</h2>
+      <p>황리단길은 점포가 늘어나는 동안에도 점포당 매출이 유지됐으며, 매출은 20~30대 여성과 오후 시간대에 집중됐습니다. 기념품점의 44%가 황남·황오에 모여 있어 관련 상품을 둘러보고 구매할 수 있는 상권도 형성되어 있습니다.</p>
+      <p style="margin-top:10px">다만 굿즈 단독 매출과 구매 전환율, 2025년 방문객 실측 자료는 아직 부족합니다. 따라서 이번 분석은 사업성을 예측하기보다 시장 가능성을 가늠할 수 있는 탐색적 근거로 보는 것이 적절합니다.</p>
       <div class="split">
         <div class="box">
           <h4>지금 할 수 있는 결정</h4>
@@ -809,8 +811,7 @@ footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justif
           <tr><td>중요도 0.296 · 2.8배</td><td>RF·GB는 유사업종 점포수 0.299 1위, LGBM은 직장인구 0.189 1위</td><td><span class="no">제외</span><br>“3개 모델 공통 1위” 불성립</td></tr>
         </tbody>
       </table>
-      <div class="quiet">옛 안의 “밀도 단독 R² 0.247 vs 유동 0.013(19배)”도 재현되지 않았습니다. 전체 풀링으로는 밀도 0.929, 유동 0.000으로 조건이 다르면 값이 뒤집힙니다.</div>
-    </div>
+          </div>
 
     <div class="grid2" style="margin-top:22px">
       <div class="card rv">
