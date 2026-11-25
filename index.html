@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>경주 황리단길 굿즈 사업 인사이트 리포트 대시보드</title>
+<style>
+@font-face{font-family:'Pretendard Variable';src:url('../fonts/PretendardVariable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+:root{
+  --off:#F7F7F4;--white:#FFFFFF;--beige:#CFC6B4;--beige-2:#E7DFD0;--sand:#FAF7F0;
+  --char:#2B2B28;--char-2:#3E3B35;--mu:#6E6A62;--faint:#9A948A;
+  --line:#E4E0D6;--block:#EBE9E4;--w70:rgba(247,247,244,.72);--w55:rgba(247,247,244,.55);
+  --r:16px;--max:1120px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+p,li,td{text-wrap:pretty}
+h1,h2,h3{text-wrap:balance}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--off);color:var(--char);font-family:'Pretendard Variable','Pretendard','Malgun Gothic',sans-serif;
+  line-height:1.7;font-size:16px;-webkit-font-smoothing:antialiased;word-break:keep-all}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+::selection{background:var(--beige);color:var(--char)}
+.progress{position:fixed;left:0;top:0;right:0;height:3px;z-index:80}
+.progress i{display:block;height:100%;width:0;background:var(--char)}
+.top{position:sticky;top:0;z-index:70;background:rgba(247,247,244,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(43,43,40,.08)}
+.top .in{max-width:var(--max);margin:0 auto;padding:14px 32px;display:flex;align-items:center;gap:24px}
+.brand{font-size:13px;font-weight:700;letter-spacing:.06em}
+.brand span{color:var(--faint);font-weight:500;margin-left:6px}
+.tnav{margin-left:auto;display:flex;gap:22px;font-size:12.5px;color:var(--mu)}
+.tnav a{text-decoration:none;position:relative;padding:4px 0}
+.tnav a.on{color:var(--char);font-weight:700}
+.tnav a.on::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:2px;background:var(--char)}
+main{max-width:var(--max);margin:0 auto;padding:0 32px}
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+.hero{display:grid;grid-template-columns:1.08fr .92fr;gap:48px;align-items:center;padding:86px 0 80px}
+.kick{font-size:11.5px;font-weight:600;letter-spacing:.01em;color:var(--mu);margin-bottom:20px;line-height:1.8}
+.hero h1{margin:0;font-size:clamp(44px,5.4vw,68px);line-height:1.1;letter-spacing:-.045em;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--faint)}
+.hero .lead{font-size:16px;color:var(--mu);margin:26px 0 0;max-width:544px;line-height:1.8}
+.h1last{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.h1last .pill{font-size:10.5px;font-weight:600;padding:5px 10px;letter-spacing:0;transform:translateY(3px)}
+.hero .meta{margin-top:34px;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;font-size:12.5px;color:var(--mu)}
+.hero .meta b{color:var(--char);font-weight:600}
+.pill{display:inline-flex;align-items:center;padding:6px 12px;border-radius:999px;background:var(--beige);color:var(--char);font-size:11.5px;font-weight:700}
+.hero-art{position:relative;height:480px}
+.hero-art .ph{position:absolute;right:0;top:0;width:100%;height:430px;object-fit:cover;filter:grayscale(1) contrast(.97)}
+.hero-art .bg{position:absolute;left:-26px;bottom:0;width:210px;height:190px;background:var(--beige);z-index:-1}
+.hero-art .cap{position:absolute;right:0;bottom:0;font-size:11px;color:var(--faint);text-align:right;line-height:1.6}
+.hero-art .stamp{position:absolute;left:0;bottom:44px;width:230px;background:var(--off);padding:12px 16px;border-left:3px solid var(--char);font-size:11px;line-height:1.75;color:var(--char-2)}
+.hero-art .stamp b{display:block;font-size:13px}
+.sec{padding:76px 0;border-top:1px solid rgba(43,43,40,.10)}
+.sec-head{display:grid;grid-template-columns:86px 1fr;gap:18px;margin-bottom:44px}
+.chap{font-size:44px;font-weight:800;letter-spacing:-.05em;color:var(--beige);line-height:1}
+.chap small{display:block;font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--faint);margin-top:8px}
+.sec-head h2{margin:0;font-size:clamp(28px,3.2vw,38px);letter-spacing:-.04em;line-height:1.25}
+.sec-head .lead{margin:14px 0 0;font-size:15.5px;color:var(--mu);max-width:700px}
+.sec-head .lead b{color:var(--char)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.grid3 .card{display:flex;flex-direction:column}
+.impt{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;font-size:12px;line-height:1.7;color:var(--mu)}
+.impt b{color:var(--char);font-weight:700}
+.keep35 .card{padding:24px 26px 30px}
+.keep35 .bars{min-height:214px;margin-top:2px}
+.keep35 .brow{grid-template-columns:96px 1fr 44px;gap:10px;padding-right:6px}
+.keep35 .impt{margin-top:0;padding-top:16px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:28px}
+.card .k{font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--faint);margin-bottom:12px}
+.card h3{margin:0 0 8px;font-size:19px;letter-spacing:-.02em}
+.card p{margin:0;color:var(--mu);font-size:14.5px;line-height:1.8}
+.card.dark{background:var(--char);border-color:var(--char);color:var(--off)}
+.card.dark h3{color:var(--off)}
+.card.dark p{color:var(--w70)}
+.card.beige{background:var(--beige-2);border-color:var(--beige-2)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);background:var(--white);margin:0 0 34px}
+.kpi{padding:26px 24px 22px;border-right:1px solid var(--line)}
+.kpi:last-child{border-right:0}
+.kpi .lb{font-size:11.5px;color:var(--mu)}
+.kpi .v{font-size:34px;font-weight:700;letter-spacing:-.045em;line-height:1.15;margin-top:8px}
+.kpi .v small{font-size:14px;font-weight:600;color:var(--mu);margin-left:2px;letter-spacing:0}
+.kpi .d{font-size:11.5px;color:var(--mu);margin-top:6px}
+.sub{margin:52px 0 18px;font-size:22px;letter-spacing:-.03em;text-align:left}
+.tabs{display:inline-flex;background:var(--block);border-radius:999px;padding:4px;gap:2px}
+.tabs button{border:0;background:transparent;color:var(--mu);font-size:12px;font-weight:700;padding:7px 14px;border-radius:999px}
+.tabs button.on{background:var(--white);color:var(--char);box-shadow:0 1px 4px rgba(43,43,40,.12)}
+.bars{display:flex;flex-direction:column;gap:14px;margin-top:6px}
+.brow{display:grid;grid-template-columns:118px 1fr 78px;align-items:center;gap:16px;font-size:13px}
+.brow .nm{color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brow.hi .nm{color:var(--char);font-weight:700}
+.brow b{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.track{height:12px;background:var(--block);border-radius:4px;overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--beige);border-radius:4px;transition:width .95s cubic-bezier(.22,.61,.36,1)}
+.track i.hi{background:var(--char)}
+.tip{position:fixed;z-index:90;pointer-events:none;background:var(--char);color:var(--off);font-size:11.5px;padding:6px 9px;border-radius:6px;opacity:0;transform:translate(-50%,-130%);transition:opacity .15s}
+.tip.on{opacity:1}
+.duo{display:flex;flex-direction:column;gap:10px}
+.duo .row{display:grid;grid-template-columns:96px 1fr 58px;gap:14px;align-items:center;font-size:12.5px;color:var(--mu)}
+.duo .row b{text-align:right;color:var(--char);font-weight:600;font-variant-numeric:tabular-nums}
+.duo .track{height:10px}
+</style>
+</head>
+<body>
+<div class="progress"><i id="pbar"></i></div>
+<style>
+.judge{border:1px solid var(--line);background:var(--white);border-radius:var(--r);padding:26px 26px 22px;position:relative;overflow:hidden}
+.judge::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--beige)}
+.judge.y::before{background:#4A7C59}.judge.p::before{background:#B08A4F}.judge.w::before{background:var(--faint)}
+.judge .tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--mu);margin-bottom:14px}
+.judge .tag i{width:7px;height:7px;border-radius:50%;background:currentColor}
+.judge h3{margin:0 0 10px;font-size:20px;letter-spacing:-.025em}
+.judge p{color:var(--mu);font-size:13.8px;margin:0 0 16px}
+.judge .ev{border-top:1px solid var(--line);padding-top:14px;font-size:12.5px;color:var(--mu);display:grid;gap:6px}
+.judge .ev span{display:flex;justify-content:space-between;gap:10px}
+.judge .ev b{color:var(--char);font-weight:600}
+.eq{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:8px 0 4px}
+.eq .box{border:1px dashed var(--faint);border-radius:12px;padding:16px 20px;min-width:130px}
+.eq .box small{display:block;font-size:11px;color:var(--mu);letter-spacing:.04em}
+.eq .box b{font-size:22px;letter-spacing:-.03em}
+.eq .box.miss{border-color:#B08A4F;background:#FBF7EE}
+.eq .op{font-size:20px;color:var(--faint)}
+details.acc{border:1px solid var(--line);background:var(--white);border-radius:12px;margin-bottom:10px;overflow:hidden}
+details.acc summary{list-style:none;cursor:pointer;padding:18px 22px;display:flex;align-items:center;gap:14px;font-weight:600;font-size:14.5px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary .n{font-size:11px;color:var(--faint);font-weight:700;letter-spacing:.08em}
+details.acc summary .plus{margin-left:auto;font-size:18px;color:var(--faint);transition:.2s}
+details.acc[open] summary .plus{transform:rotate(45deg)}
+details.acc .body{padding:0 22px 20px 22px;color:var(--mu);font-size:13.8px;line-height:1.8}
+details.acc .body b{color:var(--char)}
+.impact{margin-top:10px;padding:12px 14px;background:var(--sand);border-left:3px solid var(--beige);font-size:12.5px;color:var(--char-2)}
+.inf{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:26px}
+.inf .lvl{display:flex;align-items:center;gap:10px;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--mu);margin-bottom:12px}
+.conf{display:flex;gap:3px}
+.conf i{width:16px;height:5px;border-radius:3px;background:var(--block)}
+.conf i.on{background:var(--char)}
+.inf h3{margin:0 0 8px;font-size:18px;letter-spacing:-.02em}
+.inf p{margin:0 0 14px;color:var(--mu);font-size:13.8px}
+.inf .why{font-size:12.5px;color:var(--mu);border-top:1px solid var(--line);padding-top:12px;display:grid;gap:7px}
+.inf .why b{color:var(--char)}
+.concl{background:var(--char);color:var(--off);border-radius:22px;padding:54px 56px;margin-top:12px}
+.concl .kick{color:var(--w55)}
+.concl h2{margin:0 0 18px;font-size:clamp(28px,3.4vw,40px);letter-spacing:-.04em;line-height:1.3;color:var(--off)}
+.concl h2 em{font-style:normal;color:var(--beige)}
+.concl p{color:var(--w70);font-size:15.5px;max-width:760px;margin:0}
+.concl .split{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:36px}
+.concl .box{border:1px solid rgba(247,247,244,.18);border-radius:14px;padding:22px 24px}
+.concl .box h4{margin:0 0 10px;font-size:13px;letter-spacing:.06em;color:var(--beige)}
+.concl .box ul{margin:0;padding-left:16px;font-size:13.5px;color:var(--w70);line-height:1.9}
+.concl .box li::marker{color:var(--beige)}
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;font-size:11.5px;letter-spacing:.05em;color:var(--faint);font-weight:700;padding:0 10px 10px;border-bottom:1px solid var(--char)}
+.tbl td{padding:13px 10px;border-bottom:1px solid var(--line);color:var(--mu);vertical-align:top}
+.tbl td:first-child{color:var(--char);font-weight:600;white-space:nowrap}
+.tbl .ok{color:#4A7C59;font-weight:700}
+.tbl .no{color:#A15A47;font-weight:700}
+#appendix .card{overflow-x:auto}
+footer{border-top:1px solid rgba(43,43,40,.12);margin-top:20px;padding:40px 0 60px;color:var(--faint);font-size:12px}
+footer .in{max-width:var(--max);margin:0 auto;padding:0 32px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.quiet{font-size:11.5px;color:var(--faint);margin-top:14px;line-height:1.7}
+@media (max-width:1000px){
+  .hero{grid-template-columns:1fr;padding:56px 0 48px}
+  .hero-art{height:360px}.hero-art .ph{height:320px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid3{grid-template-columns:1fr}
+  .sec-head{grid-template-columns:64px 1fr}.chap{font-size:34px}
+  .tnav{display:none}
+  .concl{padding:36px 26px}.concl .split{grid-template-columns:1fr}
+}
+@media (max-width:720px){
+  main,.top .in,footer .in{padding-left:20px;padding-right:20px}
+  .grid2,.kpis{grid-template-columns:1fr}
+  .kpi{border-right:0;border-bottom:1px solid var(--line)}
+  .brow{grid-template-columns:92px 1fr 62px;gap:10px}
+  .sec{padding:56px 0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .rv{opacity:1;transform:none;transition:none}
+  .track i{transition:none}
+}
+@media print{
+  @page{size:A4;margin:13mm 12mm}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  html,body{background:#F7F7F4}
+  body{font-size:9.8pt;line-height:1.65}
+  .progress,.top,.tip{display:none!important}
+  main{max-width:none;padding:0}
+  .rv{opacity:1!important;transform:none!important}
+  .hero{grid-template-columns:1.06fr .94fr;gap:16pt;padding:0;height:250mm;align-content:center;align-items:center;break-after:page;break-inside:avoid}
+  .kick{font-size:7.4pt;margin-bottom:10pt;line-height:1.7}
+  .hero h1{font-size:42pt;line-height:1.08}
+  .h1last{gap:9pt}
+  .h1last .pill{font-size:7pt;padding:3pt 7pt;transform:none}
+  .hero .lead{font-size:9.6pt;margin-top:12pt;max-width:none;line-height:1.75}
+  .hero-art{height:330pt}
+  .hero-art .ph{height:322pt}
+  .hero-art .bg{width:120pt;height:100pt;left:-12pt}
+  .hero-art .stamp{bottom:34pt;max-width:128pt;padding:7pt 9pt;font-size:7.4pt;line-height:1.65}
+  .sec{break-before:auto;padding:12pt 0 0;margin-top:12pt;border-top:1px solid rgba(43,43,40,.10)}
+  .sec-head{grid-template-columns:40pt 1fr;gap:10pt;margin-bottom:10pt;break-inside:avoid;break-after:avoid}
+  .chap{font-size:24pt}
+  .sec-head h2{font-size:19pt}
+  .sec-head .lead{font-size:9.4pt;margin-top:6pt}
+  .sub{font-size:13.5pt;margin:16pt 0 8pt!important;break-after:avoid}
+  .grid2{gap:9pt}
+  .grid3{grid-template-columns:repeat(3,1fr);gap:7pt}
+  .card{padding:9pt 10pt;border-radius:8pt;break-inside:avoid}
+  .grid2,.grid3,.impact,.keep35{break-inside:avoid}
+  .keep35 .card{padding:8pt 9pt}
+  .keep35 .bars{gap:6pt;min-height:0}
+  .keep35 .impt{font-size:8pt;line-height:1.56;padding-top:9px}
+  .impact{padding:7pt 9pt;font-size:7.7pt;line-height:1.55}
+  .card .k{font-size:7pt;margin-bottom:5pt}
+  .card h3{font-size:10.8pt}
+  .card p{font-size:8.4pt;line-height:1.65}
+  .kpis{grid-template-columns:repeat(4,1fr);margin-bottom:12pt;break-inside:avoid}
+  .kpi{padding:8pt 9pt 7pt}
+  .kpi .lb{font-size:7pt}
+  .kpi .v{font-size:17pt;margin-top:3pt}
+  .kpi .v small{font-size:7.5pt}
+  .kpi .d{font-size:7pt}
+  .bars{gap:7pt;margin-top:4pt}
+  .brow{grid-template-columns:72pt 1fr 42pt;gap:7pt;font-size:8pt}
+  .track{height:6pt}
+  .track i{transition:none!important}
+  .duo{gap:5pt}
+  .duo .row{grid-template-columns:64pt 1fr 40pt;gap:7pt;font-size:8pt}
+  .duo .track{height:5pt}
+  .judge{padding:10pt;break-inside:avoid}
+  .judge .tag{font-size:6.8pt;margin-bottom:6pt}
+  .judge h3{font-size:11pt}
+  .judge p{font-size:8.2pt;margin-bottom:8pt}
+  .judge .ev{font-size:7.6pt;padding-top:8pt;gap:3pt}
+  .eq .box{padding:6pt 8pt;min-width:62pt}
+  .eq .box b{font-size:11pt}
+  .inf{padding:10pt;break-inside:avoid}
+  .inf .lvl{font-size:6.8pt;margin-bottom:6pt}
+  .inf h3{font-size:10.5pt}
+  .inf p{font-size:8.2pt;margin-bottom:7pt}
+  .inf .why{font-size:7.6pt;padding-top:7pt;gap:4pt}
+  details.acc{break-inside:avoid;margin-bottom:4pt}
+  details.acc summary{padding:6pt 9pt;font-size:8.6pt}
+  details.acc .body{padding:0 9pt 6pt;font-size:8pt;line-height:1.55}
+  .impact{margin-top:4pt;padding:5pt 7pt;font-size:7.4pt}
+  .quiet{font-size:7pt;margin-top:6pt}
+  .concl{padding:18pt 20pt;border-radius:12pt;break-inside:avoid}
+  .concl h2{font-size:20pt}
+  .concl p{font-size:9pt}
+  .concl .split{gap:12pt;margin-top:14pt;grid-template-columns:1fr 1fr}
+  .concl .box{padding:10pt 12pt}
+  .concl .box ul{font-size:8.2pt;line-height:1.75}
+  .tbl{font-size:7.6pt}
+  .tbl th{padding:0 4pt 5pt}
+  .tbl td{padding:5pt 4pt}
+  .tbl td:first-child{white-space:normal}
+  #appendix .card{overflow:visible}
+  .tabs{border:1px solid var(--line);border-radius:6pt;padding:2pt}
+  .tabs button{font-size:7pt;padding:2pt 6pt;border-radius:4pt}
+  .tabs button.on{box-shadow:none;border:1px solid var(--beige)}
+  .plus{display:none}
+  #infer,#end,#appendix{break-before:page}
+  a{text-decoration:none}
+  footer{display:none}
+}
+</style>
+
+<header class="top">
+  <div class="in">
+    <div class="brand">GYEONGJU GOODS SALES ANALYSIS</div>
+    <nav class="tnav" id="tnav">
+      <a href="#why">왜</a><a href="#how">판단 기준</a><a href="#evidence">근거</a><a href="#verdict">판정</a><a href="#limits">한계</a><a href="#infer">해석</a><a href="#end">결론</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="rv in">
+      <div class="kick">경주 황리단길 굿즈 사업 분석 대시보드 ｜엘리스트랙 1차 프로젝트 [ABA5] 정다운</div>
+      <h1>경주에서<br>굿즈가<br><em>팔릴까?</em></h1>
+      <p class="lead">13개월 상권 데이터와 5개 상권, 관광 수요를 봤습니다.<br>숫자가 말해 주는 것과 그렇지 않은 것을 나눠 적었습니다.</p>
+    </div>
+    <div class="hero-art rv in">
+      <div class="bg"></div>
+      <img class="ph" src="assets/goods_lantern.jpg" alt="신라 토기 모양을 본떠 제작한 클리커 굿즈 상품 샘플">
+      <div class="stamp">신라 토기 모양을 본떠 제작한 클리커 굿즈 상품 샘플</div>
+    </div>
+  </section>
+
+  <section class="sec" id="why">
+    <div class="sec-head rv">
+      <div class="chap">01</div>
+      <div>
+        <h2>왜 이 질문을 하는가</h2>
+        <p class="lead">황리단길에 사람이 많다는 건 분명합니다. 다만 그 사람들이 굿즈를 사는지는 별개의 문제입니다. 이번 분석은 그 차이를 확인하는 데서 시작했습니다.</p>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card rv">
+        <div class="k">알고 싶은 것 ①</div>
+        <h3>수요가 있는가</h3>
+        <p>황리단길 방문객 가운데 기념품이나 굿즈를 실제로 사는 사람이 얼마나 될지.</p>
+      </div>
+      <div class="card rv">
+        <div class="k">알고 싶은 것 ②</div>
+        <h3>누가, 언제 사는가</h3>
+        <p>누가, 몇 시에, 무슨 요일에 사는지. 황리단길을 찾은 사람 구성과 결제하는 사람 구성이 같은지도 봤습니다.</p>
+      </div>
+      <div class="card rv">
+        <div class="k">알고 싶은 것 ③</div>
+        <h3>지금 들어가도 되는가</h3>
+        <p>점포가 늘어도 점포당 매출이 버티는지. 이미 빡빡한 시장인지.</p>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="card beige rv">
+        <div class="k">도출하려는 결과</div>
+        <h3>“된다/안 된다”보다<br>“무엇을 확인했고, 무엇이 남았나”</h3>
+        <p>사업성을 확정하려는 보고서는 아닙니다. 판단에 쓸 근거와 아직 빈 부분을 같이 남겼습니다.</p>
+      </div>
+      <div class="card dark rv">
+        <div class="k" style="color:var(--w55)">먼저 결론부터</div>
+        <h3>“근거는 일부 있습니다.<br>모르는 것도 있습니다.”</h3>
+        <p>매출 전망이나 손익분기, 시나리오는 넣지 않았습니다. 숫자에는 출처와 기간을 붙였고, 확인되지 않은 조합으로 새 수치를 만들지 않았습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="how">
+    <div class="sec-head rv">
+      <div class="chap">02</div>
+      <div>
+        <h2>무엇을 근거로 판정했나</h2>
+        <p class="lead">가설 세 개를 세우고 같은 기준으로 판정했습니다. H는 가설(Hypothesis)을 줄인 표기입니다.</p>
+      </div>
+    </div>
+
+    <div class="card rv" style="margin-bottom:22px">
+      <div class="k">판정 기준</div>
+      <div class="grid3" style="gap:18px">
+        <div><h3 style="font-size:16px">지지</h3><p style="font-size:13.5px">서로 다른 자료 두 개 이상이 같은 쪽을 가리킬 때. 기간도 밝힐 수 있어야 합니다.</p></div>
+        <div><h3 style="font-size:16px">부분 지지</h3><p style="font-size:13px">방향은 맞지만 자료가 하나이거나 기간이 짧을 때.</p></div>
+        <div><h3 style="font-size:16px">검증 대기</h3><p style="font-size:13.5px">판정에 필요한 원자료가 없을 때. 추정으로 메우지 않고 그대로 둡니다.</p></div>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="card rv">
+        <div class="k">H1 · 검증 대기</div>
+        <h3>매출 변동은 유동보다<br>결제 건수와 더 가깝다</h3>
+        <p>건당 결제액이 거의 일정하다면, 매출이 흔들리는 이유는 사람 수보다 결제 횟수에 있을 거라고 봤습니다.</p>
+        <div class="impact" style="margin-top:16px">확인한 자료: 건당 결제액 13개월, 매출·유동 상관 65개 관측</div>
+      </div>
+      <div class="card rv">
+        <div class="k">H2 · 지지</div>
+        <h3>매출은 오후·20~30대·여성에<br>몰리고, 유동 연령과 다르다</h3>
+        <p>황리단길을 찾은 사람과 실제로 결제하는 사람이 다를 수 있습니다. 상품과 마케팅을 짤 때 먼저 볼 부분입니다.</p>
+        <div class="impact" style="margin-top:16px">확인한 자료: 매출 특성 5상권, 요일·시간대, 신규·단골</div>
+      </div>
+      <div class="card rv">
+        <div class="k">H3 · 부분 지지</div>
+        <h3>점포가 늘어도<br>업소당 매출은 희석되지 않는다</h3>
+        <p>시장이 커지는지, 이미 포화라서 나눠 먹는지 가르는 문제입니다. 들어갈지 정할 때 바로 필요합니다.</p>
+        <div class="impact" style="margin-top:16px">확인한 자료: 점포 수 13개월, 업소당 매출, 점포~매출 상관</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="evidence">
+    <div class="sec-head rv">
+      <div class="chap">03</div>
+      <div>
+        <h2>자료에서 확인한 것</h2>
+        <p class="lead">시장, 고객, 수요, 경쟁 순으로 봤습니다. 숫자마다 <b>출처와 기간</b>을 적었습니다.</p>
+      </div>
+    </div>
+
+    <h3 class="sub" style="margin:0 0 18px">3-1 시장: 점포는 늘었고 매출은 유지됐다</h3>
+
+    <div class="kpis rv">
+      <div class="kpi"><div class="lb">업소당 월매출 · 최근 3개월</div><div class="v"><span class="cnt" data-to="1755">1,755</span><small>만원</small></div><div class="d">13개월 평균 1,642만</div></div>
+      <div class="kpi"><div class="lb">점포 수</div><div class="v"><span class="cnt" data-to="36">36</span> → <span class="cnt" data-to="38">38</span></div><div class="d">+5.6% · 경주시 129→127</div></div>
+      <div class="kpi"><div class="lb">전국 업소당 월매출</div><div class="v"><span class="cnt" data-to="1266">1,266</span><small>만원</small></div><div class="d">최근 3개월 · 13개월 1,314만</div></div>
+      <div class="kpi"><div class="lb">카드 건당 결제액</div><div class="v"><span class="cnt" data-to="13857">13,857</span><small>원</small></div><div class="d">±5% 안 · 12,935~14,606</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card rv">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px">
+          <h3 style="margin:0;font-size:16px">업소당 월평균 매출 (만원)</h3>
+          <div class="tabs" data-tabs="sales"><button class="on" data-i="0">13개월 평균</button><button data-i="1">최근 3개월</button></div>
+        </div>
+        <div class="bars" data-panel="sales" data-i="0">
+          <div class="brow hi"><span class="nm">황리단길</span><div class="track"><i class="hi" data-w="40.2" data-tip="황리단길 · 1,642만원"></i></div><b>1,642</b></div>
+          <div class="brow"><span class="nm">이태원</span><div class="track"><i data-w="100" data-tip="이태원 · 4,087만원"></i></div><b>4,087</b></div>
+          <div class="brow"><span class="nm">성수</span><div class="track"><i data-w="49.7" data-tip="성수 · 2,032만원"></i></div><b>2,032</b></div>
+          <div class="brow"><span class="nm">강남</span><div class="track"><i data-w="49.1" data-tip="강남 · 2,009만원"></i></div><b>2,009</b></div>
+          <div class="brow"><span class="nm">홍대</span><div class="track"><i data-w="46.2" data-tip="홍대 · 1,887만원"></i></div><b>1,887</b></div>
+          <div class="brow"><span class="nm">전국</span><div class="track"><i data-w="32.2" data-tip="전국 · 1,314만원"></i></div><b>1,314</b></div>
+          <div class="brow"><span class="nm">경주시</span><div class="track"><i data-w="25.1" data-tip="경주시 · 1,026만원"></i></div><b>1,026</b></div>
+        </div>
+        <div class="bars" data-panel="sales" data-i="1" hidden>
+          <div class="brow hi"><span class="nm">황리단길</span><div class="track"><i class="hi" data-w="44.4" data-tip="황리단길 · 1,755만원"></i></div><b>1,755</b></div>
+          <div class="brow"><span class="nm">이태원</span><div class="track"><i data-w="100" data-tip="이태원 · 3,955만원"></i></div><b>3,955</b></div>
+          <div class="brow"><span class="nm">홍대</span><div class="track"><i data-w="53" data-tip="홍대 · 2,094만원"></i></div><b>2,094</b></div>
+          <div class="brow"><span class="nm">성수</span><div class="track"><i data-w="46.1" data-tip="성수 · 1,825만원"></i></div><b>1,825</b></div>
+          <div class="brow"><span class="nm">강남</span><div class="track"><i data-w="40.2" data-tip="강남 · 1,588만원"></i></div><b>1,588</b></div>
+          <div class="brow"><span class="nm">전국</span><div class="track"><i data-w="32" data-tip="전국 · 1,266만원"></i></div><b>1,266</b></div>
+          <div class="brow"><span class="nm">경주시</span><div class="track"><i data-w="23.3" data-tip="경주시 · 921만원"></i></div><b>921</b></div>
+        </div>
+        <div class="quiet">카드사 추정 · 2025-08~2026-08 · 최근 3개월 = 2026-06~08</div>
+      </div>
+
+      <div class="card rv">
+        <h3 style="margin:0 0 6px;font-size:16px">점포 수와 매출의 방향</h3>
+        <p style="font-size:13px">점포가 두 개 늘어난 사이 최근 3개월 업소당 매출은 오히려 올랐습니다. 다만 2025년 10월 34개까지 내려간 뒤 반등한 것이라, 추세인지 단기 움직임인지는 아직 구분하기 어렵습니다.</p>
+        <div style="margin-top:18px" class="duo">
+          <div class="row"><span>점포 수</span><div class="track"><i class="hi" data-w="100" data-tip="2025-08 36개 → 2026-08 38개"></i></div><b>36→38</b></div>
+          <div class="row"><span>업소당 매출</span><div class="track"><i data-w="71" data-tip="13개월 1,642만 → 최근 3개월 1,755만"></i></div><b>+6.9%</b></div>
+          <div class="row"><span>경주시 점포</span><div class="track"><i data-w="48" data-tip="경주시 129개 → 127개"></i></div><b>−1.6%</b></div>
+        </div>
+        <div class="impact">34에서 38로 적으면 4개 늘어난 것처럼 보입니다. 실제 시작값은 36개이고 34개는 2025년 10월의 저점입니다. 여기서는 <b>36→38</b>로 씁니다.</div>
+        <div class="impact"><b>두 값의 경계가 다릅니다.</b> 황리단길은 경주시 안의 선택영역(경주황남), 경주시는 시 전체입니다. 둘 다 업소당 월평균이라 합산하거나 직접 비교하지 않습니다. 경주시가 낮은 것은 황리단길을 뺀 값이 아니라 관광 상권 밖 점포까지 평균에 섞이기 때문입니다.</div>
+      </div>
+    </div>
+
+    <h3 class="sub">3-2 고객: 황리단길을 찾은 사람과 결제하는 사람은 다르다</h3>
+
+    <div class="kpis rv">
+      <div class="kpi"><div class="lb">매출 20~30대 비중</div><div class="v"><span class="cnt" data-to="54.3" data-dec="1">54.3</span><small>%</small></div><div class="d">유동 20~30대는 24.0%</div></div>
+      <div class="kpi"><div class="lb">여성 비중</div><div class="v"><span class="cnt" data-to="62.8" data-dec="1">62.8</span><small>%</small></div><div class="d">건수 기준 63.6%</div></div>
+      <div class="kpi"><div class="lb">14~18시 비중</div><div class="v"><span class="cnt" data-to="45.4" data-dec="1">45.4</span><small>%</small></div><div class="d">05~09·23~05시는 0.0%</div></div>
+      <div class="kpi"><div class="lb">신규 고객</div><div class="v"><span class="cnt" data-to="94.0" data-dec="1">94.0</span><small>%</small></div><div class="d">단골 6.0%</div></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card rv">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px">
+          <h3 style="margin:0;font-size:16px">연령 구성: 매출과 유동 (%)</h3>
+          <span style="font-size:11px;color:var(--faint)">같은 모집단 아님</span>
+        </div>
+        <div class="duo">
+          <div class="row"><span>10대</span><div class="track"><i data-w="7" data-tip="매출 1.9% · 유동 8%"></i></div><b>1.9 / 8</b></div>
+          <div class="row"><span>20대</span><div class="track"><i class="hi" data-w="100" data-tip="매출 27.0% · 유동 12%"></i></div><b>27.0 / 12</b></div>
+          <div class="row"><span>30대</span><div class="track"><i class="hi" data-w="100" data-tip="매출 27.3% · 유동 12%"></i></div><b>27.3 / 12</b></div>
+          <div class="row"><span>40대</span><div class="track"><i data-w="96" data-tip="매출 26.1% · 유동 18%"></i></div><b>26.1 / 18</b></div>
+          <div class="row"><span>50대</span><div class="track"><i data-w="46" data-tip="매출 12.5% · 유동 19%"></i></div><b>12.5 / 19</b></div>
+          <div class="row"><span>60대+</span><div class="track"><i data-w="19" data-tip="매출 5.2% · 유동 32%"></i></div><b>5.2 / 32</b></div>
+        </div>
+        <div class="quiet">막대=매출 비중 / 숫자=매출·유동. 유동은 통신사 리포트 제시값(그래프 판독 근사).</div>
+      </div>
+
+      <div class="card rv">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px">
+          <h3 style="margin:0;font-size:16px">주말 비중: 기준에 따라 62.5%와 40.1%</h3>
+          <div class="tabs" data-tabs="wk"><button class="on" data-i="0">일평균</button><button data-i="1">총매출</button></div>
+        </div>
+        <div data-panel="wk" data-i="0">
+          <div style="font-size:52px;font-weight:800;letter-spacing:-.05em;line-height:1.1"><span class="cnt" data-to="62.5" data-dec="1">62.5</span><span style="font-size:20px;font-weight:600;color:var(--mu)">%</span></div>
+          <p style="font-size:13.5px">주말 <b>하루 평균</b> 매출이 평일 하루 평균보다 높다는 뜻입니다. 주말에 손님이 몰린다고 보는 쪽에 가깝습니다.</p>
+        </div>
+        <div data-panel="wk" data-i="1" hidden>
+          <div style="font-size:52px;font-weight:800;letter-spacing:-.05em;line-height:1.1"><span class="cnt" data-to="40.1" data-dec="1">40.1</span><span style="font-size:20px;font-weight:600;color:var(--mu)">%</span></div>
+          <p style="font-size:13.5px">한 주 <b>전체 매출</b>에서 토·일이 차지하는 비중입니다. 7일 중 2일이 40%를 만드는 셈입니다.</p>
+        </div>
+        <div class="impact">둘은 모순이 아닙니다. <b>분모가 다를 뿐입니다.</b> 어느 쪽도 틀리지 않지만 한 문장에 섞으면 뜻이 흐려집니다.</div>
+      </div>
+    </div>
+
+    <h3 class="sub">3-3 수요: 전체로는 늘었지만 곳마다 다르다</h3>
+
+    <div class="grid2">
+      <div class="card rv">
+        <div style="font-size:44px;font-weight:800;letter-spacing:-.05em;line-height:1"><span class="cnt" data-to="96.2" data-dec="1">96.2</span><span style="font-size:18px;color:var(--mu);font-weight:600">만/월</span></div>
+        <div style="font-size:12.5px;color:var(--mu);margin-top:4px">권역 실측 평균 · 19개월 · CV 22.3%</div>
+        <div class="duo" style="margin-top:18px">
+          <div class="row"><span>2024년</span><div class="track"><i data-w="100" data-tip="2024년 월평균 107.1만"></i></div><b>107.1만</b></div>
+          <div class="row"><span>2026 1~7월</span><div class="track"><i data-w="72" data-tip="2026년 1~7월 월평균 77.5만, 부분연도"></i></div><b>77.5만</b></div>
+          <div class="row"><span>2025-11</span><div class="track"><i data-w="38" data-tip="2025-11 APEC 41.2만"></i></div><b>41.2만</b></div>
+        </div>
+        <div class="impact">2025년 12개월은 실측이 없습니다. 2026년 1~7월 평균은 비수기만 들어 있어 2024년과 나란히 비교하지 않았습니다.</div>
+      </div>
+
+      <div class="card rv">
+        <h3 style="margin:0 0 14px;font-size:16px">관광지 입장객 2022 → 2025 (만 명)</h3>
+        <div class="duo">
+          <div class="row"><span>대릉원</span><div class="track"><i class="hi" data-w="100" data-tip="132.9만 → 243.0만 (+82.8%)"></i></div><b>+82.8%</b></div>
+          <div class="row"><span>불국사</span><div class="track"><i class="hi" data-w="73" data-tip="144.3만 → 231.3만 (+60.3%)"></i></div><b>+60.3%</b></div>
+          <div class="row"><span>석굴암</span><div class="track"><i data-w="70" data-tip="석굴암 +58.2%"></i></div><b>+58.2%</b></div>
+          <div class="row"><span>동궁과 월지</span><div class="track"><i data-w="1" data-tip="162.9만 → 162.1만 (−0.5%)"></i></div><b>−0.5%</b></div>
+          <div class="row"><span>경주월드</span><div class="track"><i data-w="0" data-tip="152.9만 → 111.2만 (−27.3%)"></i></div><b>−27.3%</b></div>
+        </div>
+        <div class="quiet">know.tour.go.kr 실측 · 합계 행만 사용 · 황리단길과 가까운 곳이 먼저 늘었습니다.</div>
+      </div>
+    </div>
+
+    <h3 class="sub">3-4 경쟁: 44%가 두 동에 몰려 있다</h3>
+
+    <div class="grid2">
+      <div class="card rv">
+        <div style="display:flex;gap:18px;align-items:baseline;flex-wrap:wrap">
+          <div style="font-size:44px;font-weight:800;letter-spacing:-.05em;line-height:1"><span class="cnt" data-to="51">51</span><span style="font-size:18px;color:var(--mu);font-weight:600">개</span></div>
+          <div style="font-size:13px;color:var(--mu)">경주시 기념품점 116개 중 <b style="color:var(--char)">44%</b> · 황남 26 · 황오 25</div>
+        </div>
+        <div class="duo" style="margin-top:18px">
+          <div class="row"><span>황남동</span><div class="track"><i class="hi" data-w="100" data-tip="황남동 26개"></i></div><b>26</b></div>
+          <div class="row"><span>황오동</span><div class="track"><i class="hi" data-w="96" data-tip="황오동 25개"></i></div><b>25</b></div>
+          <div class="row"><span>불국동</span><div class="track"><i data-w="50" data-tip="불국동 13개"></i></div><b>13</b></div>
+          <div class="row"><span>동천동</span><div class="track"><i data-w="35" data-tip="동천동 9개"></i></div><b>9</b></div>
+          <div class="row"><span>성건동</span><div class="track"><i data-w="31" data-tip="성건동 8개"></i></div><b>8</b></div>
+        </div>
+        <div class="quiet">소상공인 상권정보 2026-08 · 상위 5개 동만 표시</div>
+      </div>
+
+      <div class="card rv">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px">
+          <h3 style="margin:0;font-size:16px">점포당 월수요 (명)</h3>
+          <div class="tabs" data-tabs="den"><button class="on" data-i="0">51개 기준</button><button data-i="1">38개 기준</button></div>
+        </div>
+        <div data-panel="den" data-i="0">
+          <div style="font-size:44px;font-weight:800;letter-spacing:-.05em;line-height:1"><span class="cnt" data-to="18865">18,865</span></div>
+          <p style="font-size:13px;margin-top:6px">황리단길 일대 · 유동 대비 매출 지수 <b>216.1</b> (이태원 108.9)</p>
+        </div>
+        <div data-panel="den" data-i="1" hidden>
+          <div style="font-size:44px;font-weight:800;letter-spacing:-.05em;line-height:1"><span class="cnt" data-to="25318">25,318</span></div>
+          <p style="font-size:13px;margin-top:6px">상권리포트 점포 38개 기준. 같은 수요를 더 많은 점포가 나눠 갖는 셈.</p>
+        </div>
+        <div class="impact">유동이 가장 작은 상권이라 분모 효과가 섞여 있습니다. 방문객 한 사람의 구매율로 읽으면 안 됩니다.</div>
+        <div class="quiet">불국사 14,825(13개) · 동궁 11,256(12개) · 보문 6개(집계 없음)</div>
+      </div>
+    </div>
+    <div class="keep35"><h3 class="sub">3-5 상점과 상품: 현장 수집 71곳</h3>
+    <div class="grid3">
+      <div class="card rv">
+        <div class="k">업종 구성 (71곳)</div>
+        <div class="bars">
+          <div class="brow"><span class="nm">음식점</span><div class="track"><i data-w="100" data-tip="음식점 29곳 (40.8%)"></i></div><b>29</b></div>
+          <div class="brow hi"><span class="nm">체험·공방</span><div class="track"><i class="hi" data-w="72.4" data-tip="체험·공방 21곳 (29.6%)"></i></div><b>21</b></div>
+          <div class="brow"><span class="nm">카페</span><div class="track"><i data-w="41.4" data-tip="카페 12곳 (16.9%)"></i></div><b>12</b></div>
+          <div class="brow"><span class="nm">숙박</span><div class="track"><i data-w="20.7" data-tip="숙박 6곳 (8.5%)"></i></div><b>6</b></div>
+          <div class="brow"><span class="nm">사진관 등</span><div class="track"><i data-w="10.3" data-tip="사진관 등 3곳 (4.2%)"></i></div><b>3</b></div>
+        </div>
+        <p class="impt"><b>황리단길은 먹거리 중심 상권입니다.</b> 굿즈·소품 판매는 체험·공방 21곳과 일부 카페에서 이뤄지며, 전문 매장은 많지 않습니다. 직접적인 경쟁은 적지만, 고객층은 기존 체험·공방 방문객과 겹칩니다.</p>
+      </div>
+      <div class="card rv">
+        <div class="k">온라인 채널 보유 (71곳)</div>
+        <div class="bars">
+          <div class="brow hi"><span class="nm">인스타그램</span><div class="track"><i class="hi" data-w="100" data-tip="인스타그램 46곳 (64.8%)"></i></div><b>46</b></div>
+          <div class="brow hi"><span class="nm">스마트스토어</span><div class="track"><i class="hi" data-w="45.7" data-tip="스마트스토어 21곳 (29.6%)"></i></div><b>21</b></div>
+          <div class="brow"><span class="nm">블로그</span><div class="track"><i data-w="34.8" data-tip="블로그 16곳 (22.5%)"></i></div><b>16</b></div>
+          <div class="brow"><span class="nm">홈페이지</span><div class="track"><i data-w="2.2" data-tip="홈페이지 1곳 (1.4%)"></i></div><b>1</b></div>
+        </div>
+        <p class="impt"><b>홍보는 SNS가 중심이며, 실제 판매형 스토어는 10곳 중 3곳입니다.</b> 온라인 판매의 성장 여지가 있는 동시에, 현재는 오프라인 중심 상권일 가능성도 있어 단정하기 어렵습니다.</p>
+      </div>
+      <div class="card rv">
+        <div class="k">상품 유형 (313건 · 키워드)</div>
+        <div class="bars">
+          <div class="brow"><span class="nm">음료·커피</span><div class="track"><i data-w="100" data-tip="음료·커피 52건"></i></div><b>52</b></div>
+          <div class="brow"><span class="nm">식사</span><div class="track"><i data-w="73.1" data-tip="식사 38건"></i></div><b>38</b></div>
+          <div class="brow"><span class="nm">디저트·베이커리</span><div class="track"><i data-w="59.6" data-tip="디저트·베이커리 31건"></i></div><b>31</b></div>
+          <div class="brow hi"><span class="nm">패브릭·자수</span><div class="track"><i class="hi" data-w="55.8" data-tip="패브릭·자수 29건"></i></div><b>29</b></div>
+          <div class="brow hi"><span class="nm">도자기·그릇</span><div class="track"><i class="hi" data-w="53.8" data-tip="도자기·그릇 28건"></i></div><b>28</b></div>
+          <div class="brow hi"><span class="nm">액세서리</span><div class="track"><i class="hi" data-w="44.2" data-tip="액세서리 23건"></i></div><b>23</b></div>
+        </div>
+        <p class="impt"><b>등록 상품의 약 3분의 2는 식음·디저트이며, 소품류는 87건(27.8%)입니다.</b> 소품이 주력 상품은 아니지만, 일정 수준의 상품군은 형성되어 있는걸 확인할 수 있습니다.</p>
+      </div>
+    </div>
+    <div class="impact">상점 71곳 중 상품이 등록된 곳은 48곳이고, 좌표가 없는 상점은 공간 분석에서 제외했습니다. 출처 — 소상공인 상권정보·경주시 공공데이터(상상황리단길 상점·상품, 2026-08 수집)<br>· H3(점포가 늘어도 매출 유지)와 함께 보면, 늘어난 점포가 식음·체험 쪽일 가능성을 시사합니다.<br>· 해석 B(기념품점 수요 방향)에 “상품 단위로 무엇이 실제로 등록돼 있는가”라는 근거를 더합니다.<br>· H1이 막힌 이유(굿즈 단독 매출 없음)를 보완하는 유일한 상품 단위 자료입니다.</div></div>
+  </section>
+
+  <section class="sec" id="verdict">
+    <div class="sec-head rv">
+      <div class="chap">04</div>
+      <div>
+        <h2>판정: 확실한 건 하나</h2>
+        <p class="lead">같은 기준을 적용하니 <b>H2만 지지</b>였습니다. H3은 조건부, H1은 자료가 없어 판정하지 못했습니다.</p>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="judge y rv">
+        <div class="tag"><i></i>H2 · 지지</div>
+        <h3>고객과 시간대는<br>근거가 모였다</h3>
+        <p>매출의 20~30대 비중은 54.3%, 여성은 62.8%, 14~18시는 45.4%입니다. 매출 특성과 요일, 시간대 자료가 같은 방향을 가리켰습니다.</p>
+        <div class="ev">
+          <span>20~30대 매출 <b>54.3%</b></span>
+          <span>유동 20~30대 <b>24.0%</b></span>
+          <span>14~18시 <b>45.4%</b></span>
+        </div>
+      </div>
+      <div class="judge p rv">
+        <div class="tag"><i></i>H3 · 부분 지지</div>
+        <h3>점포는 늘고<br>매출은 유지됐다</h3>
+        <p>점포는 36개에서 38개로 늘었고 업소당 매출은 1,642만 원(최근 3개월 1,755만 원)입니다. 방향은 맞지만 13개월치뿐이고, 점포 수와 매출의 전체 상관은 −0.10입니다.</p>
+        <div class="ev">
+          <span>점포 <b>36 → 38 (+5.6%)</b></span>
+          <span>업소당 매출 <b>1,642만</b></span>
+          <span>점포~매출 상관 <b>−0.10</b></span>
+        </div>
+      </div>
+      <div class="judge w rv">
+        <div class="tag"><i></i>H1 · 검증 대기</div>
+        <h3>매출 분해는<br>아직 모른다</h3>
+        <p>건당 결제액이 ±5% 안에서 거의 변하지 않아 결제 건수 쪽일 거라 짐작할 수는 있습니다. 하지만 월별 건수와 유동 원자료가 없어 확인은 못 했습니다.</p>
+        <div class="ev">
+          <span>건당 결제액 <b>13,857원</b></span>
+          <span>범위 <b>12,935~14,606원</b></span>
+          <span>매출~유동 상관 <b>−0.18</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card rv" style="margin-top:22px">
+      <div class="k">H1이 막힌 이유</div>
+      <div class="eq">
+        <div class="box"><small>매출</small><b>관측됨</b></div>
+        <div class="op">=</div>
+        <div class="box miss"><small>결제 건수</small><b>월별 없음</b></div>
+        <div class="op">×</div>
+        <div class="box"><small>건당 결제액</small><b>13,857원</b></div>
+      </div>
+      <p style="font-size:13.5px;margin-top:12px">단가가 거의 일정하다는 건 확인했습니다. 매출이 흔들릴 때 같이 움직였을 쪽은 건수라고 보는 게 자연스럽습니다. 다만 월별 건수를 볼 수 없어서 <b>“그럴 수 있다”</b> 이상은 말하지 않습니다.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="limits">
+    <div class="sec-head rv">
+      <div class="chap">05</div>
+      <div>
+        <h2>자료가 답하지 못한 것</h2>
+        <p class="lead">자료가 없다는 말로 끝내지 않았습니다. <b>어떤 판단이 막히는지</b>까지 적었습니다.</p>
+      </div>
+    </div>
+
+    <details class="acc rv" open>
+      <summary><span class="n">01</span>굿즈 단독 매출·가격이 없다<span class="plus">+</span></summary>
+      <div class="body">
+        지금 보이는 매출은 <b>기념품점 업종 전체</b>이고, 매출 가운데 식음이 68.6%입니다. 굿즈만의 객단가나 판매량이 아니라서 굿즈 사업 손익을 바로 계산할 수 없습니다.
+        <div class="impact">막는 판단: 굿즈 단독 매출 추정, 가격·마진 설계, 손익분기 계산</div>
+      </div>
+    </details>
+    <details class="acc rv">
+      <summary><span class="n">02</span>2025년 권역 방문 실측이 12개월 비어 있다<span class="plus">+</span></summary>
+      <div class="body">
+        권역 방문 자료는 31개월 중 19개월만 있습니다. 2024년과 2026년을 이어 붙인 추세선을 그릴 수 없고, 2025년 11월 APEC 때의 41.2만도 한 달치일 뿐입니다.
+        <div class="impact">막는 판단: 방문 수요의 연간 추세, 계절성 확정</div>
+      </div>
+    </details>
+    <details class="acc rv">
+      <summary><span class="n">03</span>관측 기간이 13개월뿐이다<span class="plus">+</span></summary>
+      <div class="body">
+        점포 36→38과 매출 유지는 13개월치 자료의 결과입니다. 2025년 10월 34개까지 내려간 뒤 올라온 것이라, <b>추세와 단기 반등이 섞여 있습니다.</b>
+        <div class="impact">막는 판단: 시장이 커지는 중인지, 포화인지</div>
+      </div>
+    </details>
+    <details class="acc rv">
+      <summary><span class="n">04</span>주말 정의가 두 가지다<span class="plus">+</span></summary>
+      <div class="body">
+        일평균으로 보면 62.5%, 총매출로 보면 40.1%입니다. 둘 다 맞지만 분모가 다릅니다. 어떤 기준으로 말하느냐에 따라 주말의 무게가 달라 보입니다.
+        <div class="impact">막는 판단: 주말 운영 전략의 우선순위</div>
+      </div>
+    </details>
+    <details class="acc rv">
+      <summary><span class="n">05</span>서울 패널 모델로는 황리단길을 직접 맞히지 못했다<span class="plus">+</span></summary>
+      <div class="body">
+        상권 특성만 쓴 모델의 R²는 0.830으로, 직전 분기 매출을 그대로 쓴 기준선 0.909보다 낮았습니다. 관광특구는 검증 자료가 19행, 5개 상권뿐입니다. 모델 0.522, 전년 동기 0.515로 사실상 차이가 없고, 변하지 않는 상권 특성만 뺀 모델과의 RMSE 차이도 0.011(신뢰구간 −0.012~0.035)로 0을 포함합니다.
+        <div class="impact">막는 판단: 모델 기반 매출 예측</div>
+      </div>
+    </details>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="card beige rv">
+        <div class="k">지금 결정할 수 있는 것</div>
+        <h3>타겟과 시간대,<br>들어갈 방향</h3>
+        <p>20~30대 여성, 오후 시간대, 점포가 늘어도 매출이 유지된 흐름, 황남·황오에 모인 점포. 실행 계획을 세울 때 전제로 둘 수 있는 것들입니다.</p>
+      </div>
+      <div class="card rv">
+        <div class="k">지금 결정할 수 없는 것</div>
+        <h3>매출 규모와<br>손익분기</h3>
+        <p>굿즈 단독 판매량과 객단가가 없고 매출 분해도 확인되지 않았습니다. 이 자료로는 “얼마 벌까”에 답할 수 없습니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="infer">
+    <div class="sec-head rv">
+      <div class="chap">06</div>
+      <div>
+        <h2>확인은 못 했지만, 짐작할 수 있는 것</h2>
+        <p class="lead">확인된 결론이 아니라 해석입니다. 각 항목에 틀리는 조건도 적었습니다.</p>
+      </div>
+    </div>
+
+    <div class="grid3">
+      <div class="inf rv">
+        <div class="lvl">해석 A · 확신도 중간 <span class="conf"><i class="on"></i><i class="on"></i><i></i></span></div>
+        <h3>타겟은 20~30대 여성,<br>시간은 오후</h3>
+        <p>매출 구성이 유동 구성과 다릅니다. 매출에서 20~30대가 차지하는 비중이 60대보다 훨씬 큽니다.</p>
+        <div class="why">
+          <span><b>근거</b> 매출 54.3% vs 유동 24.0% · 여성 62.8% · 14~18시 45.4%</span>
+          <span><b>틀리는 조건</b> 굿즈 구매 고객을 조사했을 때 다른 구성이 나오면 틀린 해석입니다.</span>
+        </div>
+      </div>
+      <div class="inf rv">
+        <div class="lvl">해석 B · 확신도 중하 <span class="conf"><i class="on"></i><i></i><i></i></span></div>
+        <h3>기념품점 수요의 방향은<br>굿즈에도 비슷할 듯</h3>
+        <p>같은 상권, 같은 방문객을 상대합니다. 업종 전체 매출이 유지된다면 굿즈도 비슷한 환경에 놓입니다.</p>
+        <div class="why">
+          <span><b>근거</b> 업소당 1,642만 유지 · 점포 +2개 · 관광 수요 +82.8%(대릉원)</span>
+          <span><b>틀리는 조건</b> 굿즈 단독 판매가 업종 전체와 반대로 움직이면 틀립니다.</span>
+        </div>
+      </div>
+      <div class="inf rv">
+        <div class="lvl">해석 C · 확신도 중간 <span class="conf"><i class="on"></i><i class="on"></i><i></i></span></div>
+        <h3>주말·오후 운영이<br>유리할 것</h3>
+        <p>주말 하루 평균 매출이 평일보다 높고 결제는 오후에 몰립니다. 운영 시간과 인력 배치를 정할 때 참고할 수 있습니다.</p>
+        <div class="why">
+          <span><b>근거</b> 주말 일평균 62.5% · 14~18시 45.4% · 05~09시 0.0%</span>
+          <span><b>틀리는 조건</b> 총매출 기준(40.1%)으로 보면 평일 저녁 수요가 더 클 수 있어, 그 경우 결론이 달라집니다.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card rv" style="margin-top:22px">
+      <div class="k">짐작하지 않은 것</div>
+      <p style="font-size:13.5px">객단가, 전환율, 재방문율, 월 매출 규모는 넣지 않았습니다. <b>굿즈 단독 판매 자료</b> 없이 이 숫자를 만들면 근거가 아니라 추정이 됩니다. 필요한 자료는 다음 장에 적었습니다.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="end">
+    <div class="sec-head rv">
+      <div class="chap">07</div>
+      <div>
+        <h2>결론: 근거는 일부, 조건은 붙습니다</h2>
+        <p class="lead"><b>무엇이 확인됐고, 무엇을 더 봐야 하는지</b>로 정리했습니다.</p>
+      </div>
+    </div>
+
+    <div class="concl rv">
+      <div class="kick">종합 판단</div>
+      <h2>가능성은 보이지만,<br>확정하려면 <em>자료가 더 필요</em>합니다.</h2>
+      <p>황리단길은 점포가 늘어도 점포당 매출이 유지됐고, 매출은 20~30대 여성과 오후 시간대에 몰렸습니다. 기념품점 44%가 황남·황오에 모여 있어 고를 거리가 있는 상권이기도 합니다. 다만 굿즈 단독 매출과 전환율, 2025년 방문 실측이 없습니다. 사업성 예측이 아니라 <b>탐색적 근거</b>로 읽어야 합니다.</p>
+      <div class="split">
+        <div class="box">
+          <h4>지금 할 수 있는 결정</h4>
+          <ul>
+            <li>20~30대 여성·오후 중심의 상품·운영 가설</li>
+            <li>황남·황오 점포 집적을 보고 입지 후보 좁히기</li>
+            <li>주말·오후 인력 배치의 초기 가정</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h4>실행 전 확인 세 가지</h4>
+          <ul>
+            <li>월별 결제 건수·유동 원값: H1 판정</li>
+            <li>굿즈 단독 가격·판매 실측: 사업성 직접 판단</li>
+            <li>2025년 권역 방문 실측: 추세 판단</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid3" style="margin-top:22px">
+      <div class="card rv">
+        <div class="k">STEP 1 · 시범 운영</div>
+        <h3>작은 규모로<br>먼저 팔아 본다</h3>
+        <p>굿즈 단독 판매량과 객단가, 전환율은 자료가 아니라 <b>직접 팔아 봐야</b> 나옵니다. 짧게라도 시범 운영을 하는 게 가장 빠릅니다.</p>
+      </div>
+      <div class="card rv">
+        <div class="k">STEP 2 · 분기 검증</div>
+        <h3>가설을<br>분기마다 다시 본다</h3>
+        <p>13개월은 추세를 확정하기에 짧습니다. 분기마다 점포, 매출, 유동을 다시 보고 판정을 고칩니다.</p>
+      </div>
+      <div class="card rv">
+        <div class="k">STEP 3 · 판정 기준 유지</div>
+        <h3>기준을 바꾸지 않고<br>숫자만 갱신한다</h3>
+        <p>지지, 부분 지지, 검증 대기의 기준은 그대로 둡니다. 결과가 달라져도 기준을 나중에 바꾸지 않습니다.</p>
+      </div>
+    </div>
+
+    <div class="card dark rv" style="margin-top:22px">
+      <div class="k" style="color:var(--w55)">한 줄 정리</div>
+      <h3 style="font-size:22px;line-height:1.55">고객과 시간대 측면에서는 유의미한 근거를 확보했습니다. 점포와 매출에서도 긍정적인 흐름이 확인되지만, 분석 기간이 짧아 추가 확인이 필요합니다. 매출 구조는 자료 보완 후 판단할 수 있습니다.</h3>
+      <p style="margin-top:12px">현재까지 확인된 사실과 추가 검증이 필요한 부분을 구분해 제시했으며, 본 자료는 사업성에 대한 확정적 보증이 아닌 의사결정을 위한 참고 자료입니다.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="appendix">
+    <div class="sec-head rv">
+      <div class="chap">A<small>부록</small></div>
+      <div>
+        <h2>수치 재검증</h2>
+        <p class="lead">발표안 숫자를 원자료로 다시 계산했습니다. <b>조건부 3건, 제외 2건</b>.</p>
+      </div>
+    </div>
+
+    <div class="card rv" style="padding:26px 28px">
+      <table class="tbl">
+        <thead><tr><th>수치</th><th>계산·출처</th><th>판단</th></tr></thead>
+        <tbody>
+          <tr><td>총량 지수 110.6</td><td>(2,801,046×3.9%×20,000) ÷ (2,576,840×4.6%×16,667)</td><td><span class="ok">조건부 사용</span><br>방문 소스 혼합·설문 표본</td></tr>
+          <tr><td>전국 1,266만</td><td>상권리포트 전국 최근 3개월 평균 (13개월 1,314만)</td><td><span class="ok">사용</span><br>동일 단위·3개월 창</td></tr>
+          <tr><td>34 → 38</td><td>2025-10 저점 34 → 2026-08 38 (시작 36)</td><td><span class="ok">조건부 사용</span><br>저점·현재 병기</td></tr>
+          <tr><td>R² 0.791</td><td>E0(고정 특성만 사용, 2021~24 학습→2025 검증) GradientBoosting 0.790 · RandomForest 0.838</td><td><span class="no">제외</span><br>현행 결론(E1 0.830 &lt; 0.909)과 충돌</td></tr>
+          <tr><td>중요도 0.296 · 2.8배</td><td>RF·GB는 유사업종 점포수 0.299 1위, LGBM은 직장인구 0.189 1위</td><td><span class="no">제외</span><br>“3개 모델 공통 1위” 불성립</td></tr>
+        </tbody>
+      </table>
+      <div class="quiet">옛 안의 “밀도 단독 R² 0.247 vs 유동 0.013(19배)”도 재현되지 않았습니다. 전체 풀링으로는 밀도 0.929, 유동 0.000으로 조건이 다르면 값이 뒤집힙니다.</div>
+    </div>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="card rv">
+        <div class="k">원천</div>
+        <h3 style="font-size:17px">판정에 쓴 자료</h3>
+        <p style="font-size:13.5px;line-height:1.9">상권분석리포트 5종(카드사·통신사 추정) · 상권정보 API(등록) · 권역 실측 · know.tour 입장객(실측) · 국민여행조사(설문) · 가격 210건(수집) · 서울 패널 모델(2021~2025)</p>
+      </div>
+      <div class="card rv">
+        <div class="k">재현</div>
+        <h3 style="font-size:17px">같은 경로로 다시 계산</h3>
+        <p style="font-size:13.5px;line-height:1.9">EDA: notebooks/EDA리포트.ipynb<br>도표: scripts/regen_insight_figs.py<br>예측 수치: scripts/model_report.py<br>기준일 2026-11-24 · 원자료 정정 시 수치가 바뀝니다.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="in">
+    <div>경주 황리단길 굿즈 사업 분석 대시보드<br>엘리스트랙 1차 프로젝트 · 작성자 [ABA5] 정다운</div>
+    <div style="text-align:right">탐색적 근거 분석 · 매출 예측이나 사업성 보증 아님<br>카드사·통신사 추정이며 원자료 정정 시 달라집니다.</div>
+  </div>
+</footer>
+
+<div class="tip" id="tip"></div>
+<script>
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* reveal */
+const rio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rio.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.rv').forEach(el=>rio.observe(el));
+
+/* progress + spy */
+const secs=[...document.querySelectorAll('section[id]')];
+const links=[...document.querySelectorAll('#tnav a')];
+function onScroll(){
+  const h=document.documentElement;
+  const p=h.scrollTop/(h.scrollHeight-h.clientHeight||1);
+  $('pbar').style.width=(p*100).toFixed(2)+'%';
+  let cur=secs[0]?secs[0].id:'';
+  for(const s of secs){ if(s.getBoundingClientRect().top<=140) cur=s.id; }
+  links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+cur));
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* count */
+function runCount(el){
+  if(el.dataset.done) return;
+  el.dataset.done='1';
+  const to=parseFloat(el.dataset.to), dec=+(el.dataset.dec||0);
+  const t0=performance.now(), dur=950;
+  if(reduce){el.textContent=to.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec});return}
+  function tick(t){
+    const k=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-k,3);
+    el.textContent=(to*e).toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec});
+    if(k<1)requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+const cio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){runCount(e.target);cio.unobserve(e.target)}}),{threshold:.4});
+document.querySelectorAll('.cnt').forEach(el=>cio.observe(el));
+
+/* bars */
+function fillBars(root){
+  if(!root) return;
+  root.querySelectorAll('.track i').forEach(i=>{ if(i.dataset.w) i.style.width=i.dataset.w+'%'; });
+}
+const bio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){fillBars(e.target);bio.unobserve(e.target)}}),{threshold:.2});
+document.querySelectorAll('.bars,.duo,.card').forEach(el=>{ if(el.querySelector('.track')) bio.observe(el); });
+
+/* tabs */
+document.querySelectorAll('[data-tabs]').forEach(box=>{
+  box.addEventListener('click',e=>{
+    const b=e.target.closest('button'); if(!b) return;
+    const name=box.dataset.tabs;
+    [...box.children].forEach(x=>x.classList.toggle('on',x===b));
+    const i=b.dataset.i;
+    document.querySelectorAll(`[data-panel="${name}"]`).forEach(p=>{
+      const on=p.dataset.i===i;
+      p.hidden=!on;
+      if(on){ fillBars(p); p.querySelectorAll('.cnt').forEach(runCount); }
+    });
+  });
+});
+
+/* tooltip */
+const tip=$('tip');
+document.querySelectorAll('.track i').forEach(i=>{
+  i.addEventListener('mouseenter',e=>{
+    if(!i.dataset.tip) return;
+    tip.textContent=i.dataset.tip; tip.classList.add('on');
+    tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px';
+  });
+  i.addEventListener('mousemove',e=>{ tip.style.left=e.clientX+'px'; tip.style.top=e.clientY+'px'; });
+  i.addEventListener('mouseleave',()=>tip.classList.remove('on'));
+});
+
+/* accordion reveal after open */
+document.querySelectorAll('details.acc').forEach(d=>{
+  d.addEventListener('toggle',()=>{ if(d.open) fillBars(d); });
+});
+
+/* print / PDF: freeze counters, bars and open all notes */
+function finalizePrint(){
+  document.querySelectorAll('.track i').forEach(i=>{ if(i.dataset.w) i.style.width=i.dataset.w+'%'; });
+  document.querySelectorAll('.cnt').forEach(el=>{
+    const to=parseFloat(el.dataset.to), dec=+(el.dataset.dec||0);
+    el.textContent=to.toLocaleString(undefined,{minimumFractionDigits:dec,maximumFractionDigits:dec});
+    el.dataset.done='1';
+  });
+  document.querySelectorAll('details').forEach(d=>{ d.open=true; });
+  document.querySelectorAll('.bars').forEach(fillBars);
+}
+addEventListener('beforeprint',finalizePrint);
+if(location.search.indexOf('print=1')>-1) finalizePrint();
+</script>
+</body>
+</html>
